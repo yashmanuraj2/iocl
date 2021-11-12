@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+* {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	border: none;
+	text-decoration: none;
+	box-sizing: border-box;
+	-webkit-overflow-scrolling: touch;
+	font-family: "IBM Plex Sans", sans-serif;
+}
+
+body {
+	background-color: #fffbfa;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.login {
+	width: 970px;
+	height: 680px;
+	border-radius: 15px;
+	display: flex;
+	box-shadow: 0px 22px 65px rgba(#e300a2, 0.2);
+	padding: 20px;
+	.image {
+		img {
+			width: 440px;
+			height: 640px;
+			border-radius: 10px;
+		}
+	}
+	.details {
+		margin-left: 90px;
+		display: flex;
+		flex-direction: column;
+		height: 640px;
+		.title {
+			font-size: 22px;
+			margin-top: 68px;
+		}
+		.input {
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			margin-top: 33px;
+			label {
+				font-size: 14px;
+			}
+			input {
+				width: 314px;
+				height: 58px;
+				font-size: 16px;
+				padding: 20px;
+				margin-top: 8px;
+				background-color: #fffbfa;
+				border: 1px solid #d9d5d4;
+				border-radius: 5px;
+				color: rgba(#161c32, 0.5);
+			}
+		}
+		.login-button {
+			background-color: #a04625;
+			width: 314px;
+			height: 58px;
+			font-size: 16px;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 5px;
+			box-shadow: 0px 18px 23px rgba(#e3a04d, 0.49);
+			margin-top: 20px;
+			cursor: pointer;
+		}
+		.between-button {
+			margin: 30px 0px;
+			font-size: 16px;
+			color: #8a8b95;
+			display: block;
+		}
+		.linkedin-button {
+			background-color: #0d65c2;
+			width: 314px;
+			height: 58px;
+			font-size: 16px;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 5px;
+			box-shadow: 0px 18px 23px rgba(#0d65c2, 0.36);
+			cursor: pointer;
+		}
+		.signup {
+			display: block;
+			color: #0d65c2;
+			margin-top: auto;
+		}
+	}
+}
