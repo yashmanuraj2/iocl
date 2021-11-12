@@ -6,7 +6,7 @@ const router = express.Router();
 const path = require("path");
 const UserRouter = require("./Routes/UserRouter");
 const RecordRouter = require("./Routes/RecordRouter");
-const uri = "process.ENV.url"
+const uri = "process.env.url"
 app.use(express.json());
 
 mongoose.connect(
