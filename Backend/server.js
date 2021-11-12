@@ -6,7 +6,7 @@ const router = express.Router();
 const path = require("path");
 const UserRouter = require("./Routes/UserRouter");
 const RecordRouter = require("./Routes/RecordRouter");
-const uri = "mongodb+srv://Yashraj:23%40ugust1996@realmcluster.qget5.mongodb.net/db?authSource=admin&replicaSet=atlas-103ulp-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true"
+const uri = "process.ENV.url"
 app.use(express.json());
 
 mongoose.connect(
