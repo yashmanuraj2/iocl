@@ -33,7 +33,7 @@ export default function AddModal (props)
     </fieldset>
    
     <fieldset>
-      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending" onClick={props.onCreate}>Submit</button>
+      <button  type="submit" id="contact-submit" data-submit="...Sending" onClick={props.onCreate}>SUBMIT</button>
     </fieldset>
   
  </div>
