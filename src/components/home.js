@@ -16,6 +16,7 @@ import "./form.scss";
 import AddModal from "./addmodal.js";
 
 export default function Home() {
+
   const [name, setName] = useState("");
   const [userData,setuserData] = useState("");
   const [open, setOpen] = useState(false);
@@ -24,7 +25,8 @@ export default function Home() {
   const [isapproved, setApproved] = useState(0);
   const [approved_at, setApproved_at] = useState("");
   const [admin_status, setAdmin_status] = useState(0);
-  const [reject, setReject] = useState("");
+  const [rejectHOD, setReject] = useState("");
+  const[rejectAdmin,setRejectAdmin] = useState("");
   const [ip, setIp] = useState("");
   const[openhistory,setopenhistory] = useState(false);
   const [show, setShow] = useState(false);
@@ -81,6 +83,15 @@ setopenhistory(false)
     setIp(e.target.value);
   };
 
+  const handleRejectAdmin = (e) => {
+
+    e.preventDefault();
+    setRejectAdmin(e.target.value);
+  }
+  const handleRejectHOD = (e) => {
+   e.preventDefault();
+   setReject(e.target.value);   
+  }
   const Header = (props) => {
     return (
       <div class="nav">
@@ -108,9 +119,15 @@ setopenhistory(false)
       </div>
     );
   };
+  let s4 = () => {
+    return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+  }
   const updateOne = async () => {
     const created = user.name;
     const newData = {
+      id : s4(),
       application_name: name,
       purpose: purpose,
       created_by: created,
@@ -118,7 +135,8 @@ setopenhistory(false)
       is_approved: isapproved,
       admin_status: admin_status,
       approved_at: approved_at,
-      reject: reject,
+      rejectHOD: rejectHOD,
+      rejectAdmin: rejectAdmin,
       ip_address: ip,
     };
     await axios.all([axios.put(
@@ -128,35 +146,63 @@ setopenhistory(false)
     axios.put("http://localhost:5000/history/" + user.name, newData)]);
     };
 
-  const Logout = () => {
+     
+  const Logout = () => 
+  {
     const history = useHistory();
     history.push("/login");
   };
-const onApprove =() =>
+const onApprove = async(item) =>
+{ 
 
-{
-  
-  
-  
-
+ let myindexofitem = allData[0].findIndex(x => x.id === item.id);
+ console.log(allData[0][myindexofitem])
+  allData[0][myindexofitem].is_approved = 1;
+  allData[0][myindexofitem].approved_at = new Date();
+  let User1 = allData[0][myindexofitem].created_by;
+  await axios.put("http://localhost:5000/history/"+ User1 , allData[0][myindexofitem])
  
+
 }
+
+const onReject = async(item,props) =>
+{
+
+let myindexofitem = allData[0].findIndex(x => x.id === item.id);
+console.log(allData[0][myindexofitem])
+allData[0][myindexofitem].is_approved = 0;
+
+
+
+}
+/*const onReject = async(item , props) =>
+{
+
+  return(
+
+    <div>
+      <input type="text" placeholder="RejectReason" onChange={(e)=>{setReject(e.target.value)}}/>
+
+  )
+
   
-  useEffect(() => {
+ 
+
+
+}
+*/  useEffect(() => {
     const getRecords = async () => {
       const sol = await axios.get("http://localhost:5000/getRec/" + user.name);
-      setuserData(sol.data);
-    
-      
+      setuserData(sol.data);      
       
     };
     getRecords();
-  }, [user.name]);
+  }, []);
 
   
- const allData = new Array(userData.records)
- const historyData = new Array(userData.history)
-
+const allData = new Array(userData.records)
+let historyData = new Array(userData.history)
+console.log(historyData[0])
  const  ViewHistory =(props)=> {
  if(!props.show)
  return null;
@@ -165,15 +211,15 @@ const onApprove =() =>
 
 <table>
       <caption>
-       User History
+       Your History
       </caption>
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Purpose</th>
-          <th scope="col">Date of Creation</th>
-          <th scope="col">HOD Approval Status</th>
-          <th scope="col">Admin Approval Status</th>
+          <th >Name</th>
+          <th >Purpose</th>
+          <th >Date of Creation</th>
+          <th >HOD Approval Status</th>
+          <th>Admin Approval Status</th>
 
 
         </tr>
@@ -187,10 +233,11 @@ const onApprove =() =>
         {historyData[0].map((value) => (
         <tr key ={value.id}>
           <th scope="row"></th>
+          <td>{value.id}</td>
           <td>{value.name}</td>
           <td>{value.purpose}</td>
           <td>{value.created_at}</td>
-          <td>{value.is_approved}</td>
+          <td>{`${value.is_approved===1 ? "Approved" : "Declined"}`}</td>
           <td>{value.admin_status}</td>
         </tr>
       ))}
@@ -201,7 +248,8 @@ const onApprove =() =>
        
 
  
- console.log(allData)
+ console.log(allData[0])
+ console.log(historyData.length)
 
   const ViewRecords = (props) => {
     
@@ -228,11 +276,12 @@ const onApprove =() =>
           <tbody>
             {allData[0].map((i) => (
               <tr key={i.id}>
+                <td>{i.id}</td>
                 <td>{i.application_name}</td>
                 <td>{i.purpose}</td>
                 <td>{i.ip_address}</td>
                 <td>{i.created_by}</td>
-                <td><button>Approve</button><button>Reject</button></td>
+                <td><button onClick = {()=> onApprove(i)}>Approve</button><button onClick ={onReject(i) }>Reject</button></td>
               </tr>
             ))}
           </tbody>
@@ -240,6 +289,7 @@ const onApprove =() =>
       </div>
     );
   };
+
 
   return (
     <>
@@ -263,7 +313,8 @@ const onApprove =() =>
 
         <Button onClick={handleOpen}> View Records</Button>
         <ViewRecords show={open}/>
-        <Button onClick = {ViewHistory}> View History</Button>
+        <Button onClick = {handleOpenmodal}> View History</Button>
+        <ViewHistory show={openhistory}/>
       
     </>
   );
