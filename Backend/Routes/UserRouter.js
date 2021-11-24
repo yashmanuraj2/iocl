@@ -42,11 +42,34 @@ UserRouter.post("/login", async (req, res) => {
     }
   });
 
+  UserRouter.put('/history/:name', async(req,res)=>{
+    
+
+    try{
+
+  const user = await User.findOne({ name : req.params.name});
+ 
+   
+ 
+  console.log(user.history)
+   await user.updateOne({$pull:{history:{id:req.body.id}}});
+   await user.updateOne({$push:{history:req.body}});
+   
+  res.status(200).json("record updated");
+}
+
+catch(err){
+  res.status(500).json(err);
+}
+
+  } );
+    
+   
   UserRouter.get('/getRec/:name', async(req,res)=>{
   
 try {
-  const rec = await User.find({name:req.params.name});
-  
+  const rec = await User.findOne({name:req.params.name});
+  console.log(rec)
   res.status(200).json(rec);
 }
 
@@ -54,6 +77,19 @@ catch(err){
   res.status(500).json(err)
 }
   })
+
+  UserRouter.get('/getHistory/:name', async(req,res)=>{
+  
+    try {
+      const rec = await User.findOne({name:req.params.name});
+      console.log(rec)
+      res.status(200).json(rec);
+    }
+    
+    catch(err){
+      res.status(500).json(err)
+    }
+      })
 
   
   module.exports = UserRouter;
